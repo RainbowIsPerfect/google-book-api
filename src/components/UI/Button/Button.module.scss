@@ -1,0 +1,37 @@
+@use "../../../styles/" as *;
+
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
+  padding: 5px;
+  border: none;
+  border-radius: 3px;
+  background-color: col(accent);
+  color: rgb(250, 249, 249);
+  box-shadow: 0px 0px 0px 1px transparent;
+  outline: 0px solid transparent;
+  cursor: pointer;
+  &:focus-visible {
+    box-shadow: col(accent);
+  }
+  &:hover {
+    background-color: col(accent-hover);
+  }
+  &:enabled:active {
+    transform: scale(0.95);
+  }
+  &:disabled {
+    cursor: default;
+  }
+  &-loading {
+    background-color: col(accent);
+  }
+}
+
+.loader {
+  height: 40px;
+  width: 40px;
+  fill: col(text-main);
+}

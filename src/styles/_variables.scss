@@ -1,0 +1,12 @@
+@use 'sass:map';
+
+$colors: (
+  'bg-main': rgb(17 24 39),
+  'accent': #1a56db,
+  'accent-hover': rgb(25, 85, 204),
+  'accent-disabled': rgb(48, 73, 128),
+  'elements': rgb(75, 85, 99),
+  'text-main': rgb(235, 235, 235),
+  'text-secondary': rgb(170, 170, 170),
+  'border': rgb(107 114 128),
+)

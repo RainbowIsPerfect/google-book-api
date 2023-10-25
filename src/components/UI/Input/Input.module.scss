@@ -1,0 +1,17 @@
+@use '../../../styles/' as *;
+
+.input {
+  padding: 2px;
+  border: 1px solid col(border);
+  border-radius: 3px;
+  background-color: col(elements);
+  color: col(text-main);
+  box-shadow: 0px 0px 0px 1px transparent;
+  outline: 0px solid transparent;
+  &:focus {
+    box-shadow: 0px 0px 0px 1px col(accent);
+  }
+  &::placeholder {
+    color: col(text-secondary);
+  }
+}

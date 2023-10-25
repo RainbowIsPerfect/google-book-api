@@ -1,0 +1,7 @@
+@use "../../../../styles/" as *;
+
+.circle {
+  width: 30px;
+  height: 30px;
+  fill: col(accent);
+}
