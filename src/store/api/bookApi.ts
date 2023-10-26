@@ -12,12 +12,6 @@ const getSearchQuery = (search: string, category: Category) => {
   return `${search}${category === "all" ? "" : "+subject:" + category}`;
 };
 
-const isItemsArrayInResponse = (
-  response: ApiResponse,
-): response is TransformedResponse => {
-  return Array.isArray(response?.items);
-};
-
 const transformResponse = (response: ApiResponse): TransformedResponse => {
   return {
     items: [],
@@ -47,7 +41,7 @@ export const bookApi = createApi({
 
         return `${search}${category}${sort}`;
       },
-      merge(currentCacheData, responseData, { arg }) {
+      merge(currentCacheData, responseData) {
         currentCacheData.items.push(...responseData.items);
         currentCacheData.nextPage++;
       },
