@@ -1,6 +1,5 @@
-import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { useGetBooksQuery } from "@/store";
+import { useGetBooksQuery, useLazyGetBooksQuery } from "@/store";
 import { getValidCategoryType, getValidSortType } from "@/utils";
 import { Card } from "@/components/Card";
 import { Button } from "@/components/UI/Button";
@@ -8,33 +7,16 @@ import { Circle } from "@/components/UI/Icons/Circle";
 import s from "./Home.module.scss";
 
 export const Home = () => {
-  const [params, setParams] = useSearchParams();
+  const [params] = useSearchParams();
   const query = {
     category: getValidCategoryType(params.get("category")),
     sort: getValidSortType(params.get("sort")),
     search: params.get("search") || "",
-    page: Number(params.get("page")) || 0,
   };
   const { data, isFetching, isLoading, isError, isUninitialized } =
-    useGetBooksQuery(
-      { ...query },
-      {
-        skip: !query.search,
-      },
-    );
-
-  useEffect(() => {
-    setParams((prev) => {
-      prev.delete("page");
-      return prev;
-    });
-  }, [query.category, query.sort, query.search]);
-
-  const nextPage = () =>
-    setParams((prev) => {
-      prev.set("page", String(query.page + 1));
-      return prev;
-    });
+    useGetBooksQuery({ ...query, page: 0 }, { skip: !query.search });
+  const [fetchMoreBooks] = useLazyGetBooksQuery();
+  const nextPage = data?.nextPage || 0;
 
   if (isUninitialized) {
     return (
@@ -77,7 +59,7 @@ export const Home = () => {
           {data.items.length < data.totalItems && (
             <Button
               className={s["load-more-button"]}
-              onClick={nextPage}
+              onClick={() => fetchMoreBooks({ ...query, page: nextPage })}
               isLoading={isFetching}
               disabled={isFetching}
             >

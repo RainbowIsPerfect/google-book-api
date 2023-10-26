@@ -48,4 +48,5 @@ export type ApiResponse = {
 
 export type TransformedResponse = ApiResponse & {
   items: Book[];
+  nextPage: 1;
 };

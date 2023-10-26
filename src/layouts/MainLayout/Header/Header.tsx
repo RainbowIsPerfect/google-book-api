@@ -1,8 +1,14 @@
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useRef } from "react";
+import {
+  Link,
+  useNavigate,
+  useSearchParams,
+  createSearchParams,
+} from "react-router-dom";
 import { Input } from "@/components/UI/Input";
 import { Select } from "@/components/UI/Select";
 import { SearchParams } from "@/types";
-import { getValidCategoryType, getValidSortType } from "@/utils";
+import { Button } from "@/components/UI/Button";
 import s from "./Header.module.scss";
 
 const sortOptions = [
@@ -47,25 +53,36 @@ const categoryOptions = [
   },
 ];
 
+type StringSearchParams = { [Key in keyof SearchParams]: string };
+
 export const Header = () => {
   const navigate = useNavigate();
-  const [params, setParams] = useSearchParams();
+  const [params] = useSearchParams();
+  const ref = useRef<StringSearchParams>({
+    category: params.get("category") || "all",
+    search: params.get("search") || "",
+    sort: params.get("sort") || "relevance",
+  });
 
-  const changeQuery = <T extends keyof SearchParams>(
-    key: T,
-    value: SearchParams[T],
-  ) => {
-    navigate("/");
-    setParams((prev) => {
-      prev.set(key, value);
-      return prev;
-    });
+  const changeQuery = () => {
+    const nextParams = createSearchParams({
+      category: ref.current.category,
+      search: ref.current.search,
+      sort: ref.current.sort,
+    }).toString();
+
+    navigate(`/?${nextParams}`);
   };
 
   return (
     <div className={s.header}>
       <h1 className={s.header__heading}>
-        <Link className={s.header__link} to={"/"}>Book shop</Link>
+        <Link
+          className={s.header__link}
+          to={"/"}
+        >
+          Book shop
+        </Link>
       </h1>
       <div className={s.header__controls}>
         <Input
@@ -74,11 +91,13 @@ export const Header = () => {
           placeholder="Search"
           onKeyDown={(e) => {
             if (e.key === "Enter") {
-              const target = e.target as HTMLInputElement;
-              changeQuery("search", target.value);
+              changeQuery();
             }
           }}
-          defaultValue={params.get("search") || ""}
+          onChange={(e) => {
+            ref.current.search = e.target.value;
+          }}
+          defaultValue={ref.current.search}
         />
         <div className={s.header__selections}>
           <div className={s["header__select-stack"]}>
@@ -92,9 +111,9 @@ export const Header = () => {
               className={s.header__select}
               id="category"
               onChange={(e) => {
-                changeQuery("category", getValidCategoryType(e.target.value));
+                ref.current.category = e.target.value;
               }}
-              value={params.get("category") || "all"}
+              defaultValue={ref.current.category}
               options={categoryOptions}
             />
           </div>
@@ -108,14 +127,18 @@ export const Header = () => {
             <Select
               className={s.header__select}
               id="sort"
-              onChange={(e) =>
-                changeQuery("sort", getValidSortType(e.target.value))
-              }
-              value={params.get("sort") || "relevance"}
+              onChange={(e) => (ref.current.sort = e.target.value)}
+              defaultValue={ref.current.sort}
               options={sortOptions}
             />
           </div>
         </div>
+        <Button
+          className={s.header__button}
+          onClick={changeQuery}
+        >
+          Search
+        </Button>
       </div>
     </div>
   );

@@ -12,6 +12,20 @@ const getSearchQuery = (search: string, category: Category) => {
   return `${search}${category === "all" ? "" : "+subject:" + category}`;
 };
 
+const isItemsArrayInResponse = (
+  response: ApiResponse,
+): response is TransformedResponse => {
+  return Array.isArray(response?.items);
+};
+
+const transformResponse = (response: ApiResponse): TransformedResponse => {
+  return {
+    items: [],
+    ...response,
+    nextPage: 1,
+  };
+};
+
 export const bookApi = createApi({
   reducerPath: "bookApi",
   baseQuery: fetchBaseQuery({
@@ -33,22 +47,12 @@ export const bookApi = createApi({
 
         return `${search}${category}${sort}`;
       },
-      merge(currentCacheData, responseData) {
-        if (
-          Array.isArray(currentCacheData.items) &&
-          Array.isArray(responseData.items)
-        ) {
-          currentCacheData.items.push(...responseData.items);
-        }
+      merge(currentCacheData, responseData, { arg }) {
+        currentCacheData.items.push(...responseData.items);
+        currentCacheData.nextPage++;
       },
-      transformResponse(baseQueryReturnValue: TransformedResponse) {
-        if (!Array.isArray(baseQueryReturnValue.items)) {
-          baseQueryReturnValue.items = [];
-        }
-        return baseQueryReturnValue;
-      },
-      forceRefetch({ previousArg, currentArg }) {
-        return previousArg?.page !== currentArg?.page;
+      transformResponse(baseQueryReturnValue: ApiResponse) {
+        return transformResponse(baseQueryReturnValue);
       },
     }),
     getBookById: builder.query<Book, string>({

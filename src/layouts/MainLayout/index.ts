@@ -1,1 +1,1 @@
-export { MainLayout, type OutletContext } from "./MainLayout";
+export { MainLayout } from "./MainLayout";
