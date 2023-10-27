@@ -2,8 +2,7 @@ import { useSearchParams } from "react-router-dom";
 import { useGetBooksQuery, useLazyGetBooksQuery } from "@/store";
 import { getValidCategoryType, getValidSortType } from "@/utils";
 import { Card } from "@/components/Card";
-import { Button } from "@/components/UI/Button";
-import { Circle } from "@/components/UI/Icons/Circle";
+import { Button, Circle } from "@/components/UI/";
 import s from "./Home.module.scss";
 
 export const Home = () => {

@@ -2,8 +2,8 @@ import { useGetBookByIdQuery } from "@/store";
 import { skipToken } from "@reduxjs/toolkit/query";
 import { useParams } from "react-router-dom";
 import { classNames as cl } from "@/utils";
-import s from "./CurrentBook.module.scss";
 import { Circle } from "@/components/UI/Icons/Circle";
+import s from "./CurrentBook.module.scss";
 
 type CurrentBookParams = {
   id: string;

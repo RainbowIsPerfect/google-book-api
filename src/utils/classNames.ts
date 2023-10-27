@@ -1,26 +1,24 @@
 export type Classes =
-  | Record<string, boolean | undefined>
+  | Record<string, boolean | undefined | null>
   | undefined
   | null
-  | string;
+  | string
+  | number;
 
 export const classNames = (...classes: Classes[]) => {
-  const computed = [];
-  for (const cn of classes) {
+  const computed: string[] = [];
+  classes.forEach((cn) => {
     if (cn) {
-      if (typeof cn === "string") {
-        computed.push(cn);
-      } else {
-        for (const key in cn) {
-          if (cn[key]) {
-            computed.push(key);
-          }
+      if (typeof cn !== "object") {
+        return computed.push(String(cn));
+      }
+      for (const key in cn) {
+        if (cn[key]) {
+          computed.push(key);
         }
       }
     }
-  }
+  });
 
   return computed.join(" ");
 };
-
-export default classNames;

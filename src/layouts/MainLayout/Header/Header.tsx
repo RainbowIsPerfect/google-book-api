@@ -5,53 +5,20 @@ import {
   useSearchParams,
   createSearchParams,
 } from "react-router-dom";
-import { Input } from "@/components/UI/Input";
-import { Select } from "@/components/UI/Select";
+import { Input, Select, Button } from "@/components/UI";
 import { SearchParams } from "@/types";
-import { Button } from "@/components/UI/Button";
+import { CATEGORIES, SORTINGS } from "@/constants";
 import s from "./Header.module.scss";
 
-const sortOptions = [
-  {
-    value: "relevance",
-    label: "relevance",
-  },
-  {
-    value: "newest",
-    label: "newest",
-  },
-];
+const sortOptions = CATEGORIES.map((category) => ({
+  value: category,
+  label: category,
+}));
 
-const categoryOptions = [
-  {
-    value: "all",
-    label: "all",
-  },
-  {
-    value: "art",
-    label: "art",
-  },
-  {
-    value: "biography",
-    label: "biography",
-  },
-  {
-    value: "computers",
-    label: "computers",
-  },
-  {
-    value: "history",
-    label: "history",
-  },
-  {
-    value: "medical",
-    label: "medical",
-  },
-  {
-    value: "poetry",
-    label: "poetry",
-  },
-];
+const categoryOptions = SORTINGS.map((sort) => ({
+  value: sort,
+  label: sort,
+}));
 
 type StringSearchParams = { [Key in keyof SearchParams]: string };
 
